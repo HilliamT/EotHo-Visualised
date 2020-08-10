@@ -1,9 +1,8 @@
 import { Map, TileLayer, Marker, Popup } from "react-leaflet-universal";
 import L from 'leaflet';
 import Axios from "axios";
-import csv from "csvtojson";
-import PostcodesIO from "postcodesio-client";
-let postcodes = new PostcodesIO();
+
+
 
 export default class MapElem extends React.Component {
     state = {
@@ -14,22 +13,17 @@ export default class MapElem extends React.Component {
     async componentDidMount() {
         L.Icon.Default.imagePath = 'img/';
 
-        let { data } = await Axios.get("https://raw.githubusercontent.com/hmrc/eat-out-to-help-out-establishments/master/data/participating-establishments/restaurants.csv");
+        let { data } = await Axios.get("/api/getRestaurants");
 
-        let restaurants = (await csv().fromString(data)).slice(0, 20);
-
-        restaurants = await Promise.all(restaurants.map(async (restaurant) => {
-            let { latitude, longitude } = await postcodes.lookupPostcode(restaurant.Postcode);
-            return { ...restaurant, latitude, longitude };
-        }));
-
-        this.setState({ restaurants });
+        this.setState({ restaurants: data });
     }
 
     render() {
         return (
             <div className="flex" >
-                <div id="Sidebar" className="w-1/4 h-screen bg-blue-400" />
+                <div id="Sidebar" className="w-1/4 h-screen bg-blue-400">
+
+                </div>
 
                 <Map center={this.state.currentLocation} zoom={13} className="w-3/4 h-screen">
                     <TileLayer
@@ -43,11 +37,20 @@ export default class MapElem extends React.Component {
         )
     }
 
-    renderMarker({ latitude, longitude }) {
+    renderMarker(restaurant) {
+        let { Name, latitude, longitude, Postcode, Town, County } = restaurant;
+        let line1 = restaurant["Line 1"];
+        let line2 = restaurant["Line 2"];
+
+        let search_url = `http://www.google.com/search?q=${encodeURI(Name + " " + Postcode)}`;
+
         return (
             <Marker position={[latitude, longitude]}>
                 <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
+                    <span className="font-bold">{Name}</span> <a href={search_url} target="_blank">Search</a>
+                    <br />
+                    {line1}{line2 != "" && `, ${line2}`}<br />
+                    {Postcode} {Town}, {County}
                 </Popup>
             </Marker>
         )
