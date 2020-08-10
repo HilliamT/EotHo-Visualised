@@ -1,5 +1,5 @@
 export default class Home extends React.Component {
     render() {
-        return <div>Welcome to Next.js!</div>
+        return <div className="font-sans text-xl">Welcome to Next.js!</div>
     }
 }
