@@ -3,6 +3,10 @@ import L from 'leaflet'
 
 export default class MapElem extends React.Component {
 
+    state = {
+        restaurants: [{ latitude: 51.505, longitude: -0.09 }]
+    }
+
     async componentDidMount() {
         L.Icon.Default.imagePath = 'img/';
     }
@@ -13,12 +17,23 @@ export default class MapElem extends React.Component {
                 attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={[51.505, -0.09]}>
+
+            {this.renderMarkers(this.state.restaurants)}
+        </Map>)
+    }
+
+    renderMarker({ latitude, longitude }) {
+        return (
+            <Marker position={[latitude, longitude]}>
                 <Popup>
                     A pretty CSS3 popup. <br /> Easily customizable.
-        </Popup>
+                </Popup>
             </Marker>
-        </Map>)
+        )
+    }
+
+    renderMarkers(restaurants) {
+        return restaurants.map(this.renderMarker);
     }
 
 
