@@ -12,14 +12,20 @@ export default class MapElem extends React.Component {
     }
 
     render() {
-        return (<Map center={this.state.currentLocation} zoom={13} style={{ height: "100vh" }}>
-            <TileLayer
-                attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+        return (
+            <div className="flex">
+                <div id="Sidebar" className="w-1/4 h-screen bg-blue-400" />
 
-            {this.renderMarkers(this.state.restaurants)}
-        </Map>)
+                <Map center={this.state.currentLocation} zoom={13} className="w-3/4 h-screen">
+                    <TileLayer
+                        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+
+                    {this.renderMarkers(this.state.restaurants)}
+                </Map>
+            </div>
+        )
     }
 
     renderMarker({ latitude, longitude }) {
