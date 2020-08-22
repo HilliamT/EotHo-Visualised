@@ -23,8 +23,49 @@ export default class MapElem extends React.Component {
     render() {
         return (
             <div className="flex" >
-                <div id="Sidebar" className="w-1/4 h-screen bg-blue-400">
+                <div id="Sidebar" className="w-1/4 h-screen bg-white overflow-scroll">
+                    <img className="w-full h-auto p-5" src="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/image_data/file/101794/EatOutToHelpOut-logo-colour-English-960x640.png" />
+                    <div className="m-5 font-sans font-thin">
+                        <p>The Eat Out to Help Out scheme was introduced by the UK government to help restaurants with revitalising business after the UK lockdown.</p>
 
+                        <br />
+                        <p>Use the Eat Out to Help Out Scheme at a participating establishment:</p>
+
+                        <div className="m-5">
+                            <ul className="list-disc">
+                                <li>to get a 50% discount on food or non-alcoholic drinks to eat or drink in (up to a maximum of £10 discount per diner)</li>
+                                <li>every Monday, Tuesday and Wednesday between 3 and 31 August</li>
+                                <li>as many times as you like</li>
+                            </ul>
+                        </div>
+
+                        <p>
+
+                            You do not need a voucher to use this scheme and you can use it at the same time as other offers and discounts. There is no minimum spend.
+                            <br /><br />
+
+                            You cannot claim discount on alcoholic drinks or service charges.
+
+                            <br /><br />
+
+                            The discount will be automatically available to you at participating establishments. Establishments will then claim a reimbursement from the government for the discount they’ve given you.
+
+                            <br /><br />
+
+
+                            Participating establishments may include:
+                            <div className="m-5">
+                                <ul className="list-disc">
+                                    <li>restaurants, cafés, bars or pubs</li>
+                                    <li>work and school canteens</li>
+                                    <li>food halls</li>
+                                </ul>
+                            </div>
+
+                            All diners in a group of any size can use the discount.</p>
+
+                        <p className="mt-5 font-semibold">Created by <a href="https://github.com/HilliamT" className="text-blue-500">@HilliamT</a></p>
+                    </div>
                 </div>
 
                 <Map ref={this.mapRef} center={this.state.currentLocation} minZoom={15} zoom={this.state.zoom} className="w-3/4 h-screen" onDragend={this.updateCenter.bind(this)}>
@@ -35,7 +76,7 @@ export default class MapElem extends React.Component {
 
                     {this.renderMarkers()}
                 </Map>
-            </div>
+            </div >
         )
     }
 
