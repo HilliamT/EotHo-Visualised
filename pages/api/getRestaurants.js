@@ -1,9 +1,5 @@
-import csv from "csvtojson";
 import axios from "axios";
-import cache from "memory-cache";
 import postcodes from "node-postcodes.io";
-
-const postcode_to_longlat = require('../../preprocessing/postcode_to_longlat.json');
 
 export default async (req, res) => {
     let { result } = await postcodes.geo(51.50350519362193, -0.06000660302581952);
