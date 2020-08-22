@@ -6,7 +6,8 @@ import Axios from "axios";
 export default class MapElem extends React.Component {
     state = {
         currentLocation: [51.505, -0.09],
-        restaurants: []
+        restaurants: [],
+        zoom: 15
     }
 
     mapRef = createRef()
@@ -25,7 +26,7 @@ export default class MapElem extends React.Component {
 
                 </div>
 
-                <Map ref={this.mapRef} center={this.state.currentLocation} zoom={13} className="w-3/4 h-screen" onDragend={this.updateCenter.bind(this)}>
+                <Map ref={this.mapRef} center={this.state.currentLocation} zoom={this.state.zoom} className="w-3/4 h-screen" onDragend={this.updateCenter.bind(this)}>
                     <TileLayer
                         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -40,14 +41,15 @@ export default class MapElem extends React.Component {
     async updateCenter() {
         const map = this.mapRef.current;
         if (map != null && map.leafletElement != null) {
-            console.log(map.leafletElement.getCenter());
             let { lat: latitude, lng: longitude } = map.leafletElement.getCenter();
+            let zoom = map.leafletElement.getZoom();
 
             let { restaurants } = (await Axios.post("/api/getRestaurants", { latitude, longitude })).data;
 
             this.setState({
                 currentLocation: [latitude, longitude],
-                restaurants
+                restaurants,
+                zoom
             })
         }
     }
