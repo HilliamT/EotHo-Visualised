@@ -8,7 +8,7 @@ export default async (req, res) => {
 
     if (latitude && longitude) {
         let { result } = await postcodes.geo(latitude, longitude);
-        if (result.length == 0) return res.status(400).send({ error: "Not enough results" });
+        if (!result || result.length == 0) return res.status(200).send({ restaurants });
 
         let { data } = await axios.get(`https://www.tax.service.gov.uk/eat-out-to-help-out/find-a-restaurant/results?lookup=${encodeURI(result[0].postcode)}`);
 
