@@ -37,13 +37,17 @@ export default class MapElem extends React.Component {
         )
     }
 
-    updateCenter() {
+    async updateCenter() {
         const map = this.mapRef.current;
         if (map != null && map.leafletElement != null) {
             console.log(map.leafletElement.getCenter());
-            let { lat, lng } = map.leafletElement.getCenter();
+            let { lat: latitude, lng: longitude } = map.leafletElement.getCenter();
+
+            let { restaurants } = (await Axios.post("/api/getRestaurants", { latitude, longitude })).data;
+
             this.setState({
-                center: [lat, lng],
+                currentLocation: [latitude, longitude],
+                restaurants
             })
         }
     }
