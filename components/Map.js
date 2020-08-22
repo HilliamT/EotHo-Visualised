@@ -1,4 +1,5 @@
 import { Map, TileLayer, Marker, Popup } from "react-leaflet-universal";
+import { createRef } from "react";
 import L from 'leaflet';
 import Axios from "axios";
 
@@ -10,12 +11,14 @@ export default class MapElem extends React.Component {
         restaurants: [{ latitude: 51.505, longitude: -0.09 }]
     }
 
+    mapRef = createRef()
+
     async componentDidMount() {
         L.Icon.Default.imagePath = 'img/';
 
-        let { data } = await Axios.get("/api/getRestaurants");
+        //let { data } = await Axios.get("/api/getRestaurants");
 
-        this.setState({ restaurants: data });
+        //this.setState({ restaurants: data });
     }
 
     render() {
@@ -25,18 +28,31 @@ export default class MapElem extends React.Component {
 
                 </div>
 
-                <Map center={this.state.currentLocation} zoom={13} className="w-3/4 h-screen">
+                <Map ref={this.mapRef} center={this.state.currentLocation} zoom={13} className="w-3/4 h-screen" onDragend={this.updateCenter.bind(this)}>
                     <TileLayer
                         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
 
-                    {this.renderMarkers(this.state.restaurants)}
+                    {/*this.renderMarkers(this.state.restaurants)*/}
                 </Map>
             </div>
         )
     }
 
+    updateCenter() {
+        const map = this.mapRef.current;
+        if (map != null && map.leafletElement != null) {
+            console.log(map.leafletElement.getCenter());
+            let { lat, lng } = map.leafletElement.getCenter();
+            this.setState({
+                center: [lat, lng],
+            })
+        }
+    }
+
+
+    /*
     renderMarker(restaurant) {
         let { Name, latitude, longitude, Postcode, Town, County } = restaurant;
         let line1 = restaurant["Line 1"];
@@ -59,6 +75,8 @@ export default class MapElem extends React.Component {
     renderMarkers(restaurants) {
         return restaurants.map(this.renderMarker);
     }
+
+    */
 
 
 }
