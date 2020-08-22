@@ -15,7 +15,8 @@ export default class MapElem extends React.Component {
     async componentDidMount() {
         L.Icon.Default.imagePath = 'img/';
 
-        let { restaurants } = await (await Axios.get("/api/getRestaurants")).data;
+        let [latitude, longitude] = this.state.currentLocation;
+        let { restaurants } = await (await Axios.post("/api/getRestaurants", { latitude, longitude })).data;
         this.setState({ restaurants });
     }
 
