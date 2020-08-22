@@ -3,12 +3,10 @@ import { createRef } from "react";
 import L from 'leaflet';
 import Axios from "axios";
 
-
-
 export default class MapElem extends React.Component {
     state = {
         currentLocation: [51.505, -0.09],
-        restaurants: [{ latitude: 51.505, longitude: -0.09 }]
+        restaurants: []
     }
 
     mapRef = createRef()
@@ -16,9 +14,8 @@ export default class MapElem extends React.Component {
     async componentDidMount() {
         L.Icon.Default.imagePath = 'img/';
 
-        //let { data } = await Axios.get("/api/getRestaurants");
-
-        //this.setState({ restaurants: data });
+        let { restaurants } = await (await Axios.get("/api/getRestaurants")).data;
+        this.setState({ restaurants });
     }
 
     render() {
@@ -34,7 +31,7 @@ export default class MapElem extends React.Component {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
 
-                    {/*this.renderMarkers(this.state.restaurants)*/}
+                    {this.renderMarkers()}
                 </Map>
             </div>
         )
@@ -52,31 +49,26 @@ export default class MapElem extends React.Component {
     }
 
 
-    /*
-    renderMarker(restaurant) {
-        let { Name, latitude, longitude, Postcode, Town, County } = restaurant;
-        let line1 = restaurant["Line 1"];
-        let line2 = restaurant["Line 2"];
+    renderMarker({ name, address, location }) {
+        let { line1, town, postCode } = address;
 
-        let search_url = `http://www.google.com/search?q=${encodeURI(Name + " " + Postcode)}`;
+        let search_url = `http://www.google.com/search?q=${encodeURI(name + " " + postCode)}`;
 
         return (
-            <Marker position={[latitude, longitude]}>
+            <Marker position={location}>
                 <Popup>
-                    <span className="font-bold">{Name}</span> <a href={search_url} target="_blank">Search</a>
+                    <span className="font-bold">{name}</span> <a href={search_url} target="_blank">Search</a>
                     <br />
-                    {line1}{line2 != "" && `, ${line2}`}<br />
-                    {Postcode} {Town}, {County}
+                    {line1}<br />
+                    {postCode} {town}
                 </Popup>
             </Marker>
         )
     }
 
-    renderMarkers(restaurants) {
-        return restaurants.map(this.renderMarker);
+    renderMarkers() {
+        return this.state.restaurants.map(this.renderMarker);
     }
-
-    */
 
 
 }
