@@ -7,7 +7,7 @@ export default class MapElem extends React.Component {
     state = {
         currentLocation: [51.505, -0.09],
         restaurants: [],
-        zoom: 15
+        zoom: 16
     }
 
     mapRef = createRef()
@@ -26,7 +26,7 @@ export default class MapElem extends React.Component {
 
                 </div>
 
-                <Map ref={this.mapRef} center={this.state.currentLocation} zoom={this.state.zoom} className="w-3/4 h-screen" onDragend={this.updateCenter.bind(this)}>
+                <Map ref={this.mapRef} center={this.state.currentLocation} minZoom={15} zoom={this.state.zoom} className="w-3/4 h-screen" onDragend={this.updateCenter.bind(this)}>
                     <TileLayer
                         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
